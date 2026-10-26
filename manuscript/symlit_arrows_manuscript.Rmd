@@ -1,0 +1,271 @@
+---
+title             : "Deixis in the Graphic Domain - Young Children's Comprehension of Arrows and Markers"
+shorttitle        : "Young Children’s Comprehension of Deixis in the Graphic Domain"
+author: 
+  - name          : "Gregor Kachel"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Universitätsallee 1, C1.008a, 21335 Lüneburg"
+    email         : "gregor.kachel&#64;leuphana.de"
+    role: # Contributorship roles (e.g., CRediT, https://credit.niso.org/)
+      - "Conceptualization"
+      - "Funding Acquisition"
+      - "Project Administration"
+      - "Investigation"
+      - "Methodology"
+      - "Data Curation"
+      - "Formal Analysis"
+      - "Visualization"
+      - "Writing - Original Draft Preparation"
+      - "Writing - Review & Editing"
+  - name          : "Cathal O'Madagain"
+    affiliation   : "2"
+    role:
+      - "Conceptualization"
+      - "Methodology"
+      - "Writing - Review & Editing"
+  - name          : "Daniel Haun"
+    affiliation   : "3"
+    role:
+      - "Resources"
+      - "Writing - Review & Editing"
+  - name          : "Manuel Bohn"
+    affiliation   : "1,3"
+    role:
+      - "Methodology"
+      - "Formal Analysis"
+      - "Validation"
+      - "Writing - Review & Editing"
+      - "Supervision"
+affiliation:
+  - id            : "1"
+    institution   : "Leuphana University"
+  - id            : "2"
+    institution   : "School of Collective Intelligence; Université Mohammed VI Polytechnique: Ben Guerir"
+  - id            : "3"
+    institution   : "Max-Planck-Institute for Evolutionary Anthropology"
+    
+note: "\\clearpage"
+authornote: |
+
+    *Ethics, consent and conflict of interest*: The study obtained ethical clearance from the MPG Ethics Commission in Munich, Germany, falling under an umbrella ethics application (Appl. No. 2021_45). Informed consent has been obtained from all participants. The authors declare no conflict of interest. 
+    
+    *Scientific Integrity and Openness*: The data and code necessary to reproduce the analyses presented here are publicly accessible, as are the materials necessary to attempt to replicate the findings. Analyses were pre-registered. For data, code, materials, and preregistrations, please see https://github.com/GregorKachel/SymLit_Arrows_manuscript.
+    
+    *Funding*: Gregor Kachel was supported by the German Research Foundation (Deutsche Forschungsgemeinschaft) under project number 429220405.
+    
+    *Acknowledgments*: We are thankful to Susanne Mauritz for her help in the organization of the study and to Valerie Jurgenson, Raphael Plutz and Lisa Schubert for help with data collection. We would like to thank Anne Deiglmayr for hosting this project in her research group and for her continuous support. Finally, we are very thankful to all parents and children participating in the study. 
+
+abstract: |
+  Growing up in graphically saturated environments, children encounter arrows and markers daily. We probe their developing mastery of these symbols by continuously sampling children between two and six years of age in object-choice tasks. Study 1 (N = 72; 24–59 months) establishes that children can read both arrows and markers just before their third birthday. By pitting spatial proximity against pointing direction in ambiguous displays, Study 2 (N = 98; 25–72 months) reveals a striking shift: children favor proximity until age four, only prioritizing direction by age five. Study 3 (N = 48; 36–59 months) demonstrates that this transition coincides with the ability to generalize directional interpretations to novel symbols, suggesting that this age marks the beginning of abstract symbol interpretation. Together, these studies track the development of young children’s comprehension of deixis in the graphic domain – one of the earliest forms of graphic communication children acquire.
+
+keywords          : "Graphic Communication, Deixis, Arrows, Markers, Graphic Symbols, Pragmatics, Emerging Literacy, Symbolic Literacy, Visual Communication"
+wordcount         : "1997 words (Intro=1037 and Discussion=960) 40 references"
+bibliography      : ["library.bib"]
+floatsintext      : no
+linenumbers       : yes
+draft             : no
+mask              : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+csl: apa7.csl
+output: papaja::apa6_docx
+    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, scourcing_script, eval=T, warning=F, include=F, echo=F}
+
+
+
+# Data Wrangling
+if (!require(tidyverse)) install.packages('tidyverse'); library(tidyverse)
+# Conventional Analyses
+if (!require(lsr)) install.packages('lsr'); library(lsr) # Analysis, Cohen's D
+if (!require(scales)) install.packages('scales'); library(scales) # 
+# bayes
+if (!require(brms)) install.packages('brms'); library(brms) # 
+if (!require(tidybayes)) install.packages('tidybayes'); library(tidybayes) # 
+if (!require(HDInterval)) install.packages('HDInterval'); library(HDInterval) # 
+if (!require(posterior)) install.packages('posterior'); library(posterior) # 
+# reliability
+if (!require(irr)) install.packages('irr'); library(irr) # 
+# plotting and illustrations
+if (!require(patchwork)) install.packages('patchwork'); library(patchwork) # 
+if (!require(magick)) install.packages('magick'); library(magick) # 
+if (!require(cowplot)) install.packages('cowplot'); library(cowplot) # 
+if (!require(png)) install.packages('png'); library(png) # 
+if (!require(grid)) install.packages('grid'); library(grid) # 
+if (!require(ggthemes)) install.packages('ggthemes'); library(ggthemes) 
+if (!require(ggview)) install.packages('ggview'); library(ggview) # previewing
+if (!require(ggtext)) install.packages('ggtext'); library(ggtext) # previewing
+# Tables
+if (!require(flextable)) install.packages('flextable'); library(flextable) 
+if (!require(knitr)) install.packages('knitr'); library(knitr) # 
+if (!require(kableExtra)) install.packages('kableExtra'); library(kableExtra) # 
+
+
+
+
+# NOTE; how to push title, authornotes and abstract 
+# note: "\\clearpage"
+knitr::opts_chunk$set(echo = TRUE)
+library("papaja")
+r_refs("library.bib")
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+
+# # load or install packages if necessary
+# # read in and prepare data
+# source("./symlit_arrows_analyses.r")
+
+
+```
+
+```{r, load_results, eval=T, warning=F, include=F, echo=F}
+
+# Get all .rds files, read them, and unpack into separate global objects
+list.files("../results", pattern = "\\.rds$", full.names = TRUE) %>% 
+  set_names(~ tools::file_path_sans_ext(basename(.x))) %>% 
+  map(read_rds) %>% 
+  list2env(envir = .GlobalEnv)
+
+```
+
+<!-- Begin of the document -->
+
+\newpage
+
+# Research Transparency Statement
+
+**Conflicts of interest**: All authors declare no conflicts of interest. **Funding**: Gregor Kachel was supported by the German Research Foundation (Deutsche Forschungsgemeinschaft) under project number 429220405. **Artificial intelligence**: Beyond grammar- or spell-checking, no artificial intelligence assisted technologies were used in this research or the creation of this article. **Ethics**: This research received approval from the MPG Ethics Commission in Munich, Germany, falling under an umbrella ethics application (Appl. No. 2021_45). All materials, analysis scripts and data are publicly available at <https://github.com/GregorKachel/SymLit_Arrows_manuscript>. **Study 1** - *Preregistration*: The hypotheses, methods and analyses were preregistered prior to data collection [Link](https://osf.io/2yudb): <https://osf.io/2yudb>). Additional or exploratory analyses are highlighted as such. All *Materials*, *Primary Data* and *Analysis Scripts* are publicly available at [LINK MASKED FOR REVIEWING].  **Study 2** - *Preregistration*: The hypotheses, methods and analyses were preregistered prior to data collection [Link](https://osf.io/a2nuh): <https://osf.io/a2nuh>). All *Materials*, *Primary Data* and *Analysis Scripts* are publicly available at [LINK MASKED FOR REVIEWING]. **Study 3** - *Preregistration*: The hypotheses, methods and analyses were preregistered prior to data collection [Link](https://osf.io/q825d): <https://osf.io/q825d>). All *Materials*, *Primary Data* and *Analysis Scripts* are publicly available at [LINK MASKED FOR REVIEWING]. 
+
+\newpage
+
+# Introduction
+>> Development is a lasting change in the way a person perceives and deals with their environment. [@bronfenbrenner1979ecology]
+
+Immersion in graphical systems of communication has profound consequences for perception and behavior [@dehaene2010visionlanguage; @dehaene2009reading]. Literacy acquisition – the process of learning to map meanings onto graphic forms - enhances meta-linguistic awareness [@olson2016mind], sharpens fine-grained visual discrimination [@Dunabeitia2015literacypositionuncert], alters orientation processing [@fernandes2016literacymirrorinvariance], and shapes visual search strategies to align with reading direction [@woods2013visual]. But prior to reading words, children in industrialized societies are almost constantly surrounded by symbolic and graphical artifacts - such as arrows - that they come to understand and use long before school age [@amsel2002symbolicliteracy]. The consequences of this constant but incidental type of enculturation on how children perceive symbolic artefacts are rarely studied - leaving open how children come to assign meaning to such symbols, which are among the first forms of graphic symbols they come to master. Here we present three studies tracing the comprehension of arrows and markers throughout the preschool years. 
+
+Symbolic reference often relies on iconicity or convention, such as a pedestrian crossing sign depicting a human silhouette. However, reference can also stem from spatio-temporal contiguity, as when a colored dot on an object signals ownership [@kanngiesser2019children]. Symbols grounded in physical contact, proximity, or directionality are known as *deictic* [@burks1949iconindexsymbol; @peirce1998what]. In face-to-face interaction, physical actions like touching or holding objects establish early joint attention [@tomasello2010origins] and underpin the development of pointing [@omadagain2019origin; @omadagain2027touchpoint] — arguably human communication's most foundational form of reference. In the graphic domain, markers and arrows serve as the visual analogues of touch and pointing. Markers represent the more intuitive cue, relying purely on spatial proximity to a referent. Arrows, by contrast, depend on convention: decoding them requires extrapolating an abstract vector from the arrowhead to a target — a interpretative process that is neither trivial [@jakobsen2013lookhere] nor inherent [@wittgenstein1953philosophical].
+
+Studies with children routinely rely on their ability to follow pointing gestures and physical markers, so the timeline of children’s grasp of these cues is well understood. In standard object-choice tasks, an experimenter hides a toy and indicates its location via pointing or placing a marker. Successful choice requires children to process both the cue and their partner's helpful intent [@tomasello2010origins]. Children succeed with pointing by 12 months [@sodian2004infants; @tomasello2007new; @behne2012twelve] and with physical markers by 18 months [@tomasello1997comprehension; @zlatev2013semioticvehicles]. By contrast, developmental data on arrow-symbol comprehension remains scarce. Studies report group-level success between ages two and three when arrows are held above targets [@leekam2010adults], between 30 and 36 months for printed arrows placed between choices [@jakobsen2013lookhere], and by age four for on-screen displays [@lee1998mindreadingarrows].
+
+However, these studies fail to pinpoint success across the third year and suffer from a key ambiguity: placing the arrowhead closer to its target than a distractor cues the location via proximity as well as direction. Consequently, it remains unclear whether young children understand arrows as vector symbols or merely markers. In the case of finger-pointing, O’Madagain and colleagues (2019) pitted finger proximity to one location against directional alignment with another to disentangle these two possible interpretations. Children aged 18 and 36 months favored targets cued by proximity, six-year-olds were indecisive, and only nine-year-olds and adults consistently followed the vector [@omadagain2019origin]. This indicates that strict vector extrapolation is a mature strategy, and raises the possibility that understanding arrows as vector symbols is similarly late-developing.
+
+Attentional cueing studies often contrast gaze and arrows as prototypical natural and conventional cues [@ristic2002eyes; @ciardo2019gazearrow]. A common aim is to test whether arrows guide attention due to a conceptual decoding of their direction (endogenous cueing), or rather a perceptual response to visual asymmetry (exogenous cueing) as arrowheads arguably carry more perceptual weight than their shafts [@colombo2001development; @jakobsen2013lookhere]. Isolating directional meaning from physical weight using variations of weighted as well as balanced double-headed arrows, Jakobsen and colleagues [-@jakobsen2013lookhere] found that infants and 3- to 4-year-olds are driven by visual weight, whereas 5- to 6-year-olds and adults follow vector directions. They concluded that children properly understand arrows as vector symbols no sooner than five years of age (see Supplementary Figure 1 for an overview of stimulus arrangements used in the studies reported above).
+
+From six years onward, perceptual cueing via arrows triggers reflexive orienting comparable to gaze — even when cues are uninformative, presented briefly, or despite explicit instructions to the contrary [@hommel2001symboliccontrol; @senju2004reflexive; @wainwright2005devofendogenous; @ciardo2019gazearrow]. By school age, arrow-following is so deeply ingrained that it is considered *overlearned*. That is, the processing of this conventional and acquired cue has become fully automatic and reflexive - reminiscent of developmental processes in literacy acquisition [@dehaene2010visionlanguage; @dehaene2009reading]. Nevertheless, existing developmental accounts leave open whether proximity or vector direction drives arrow interpretation in younger children, and precisely when a mature directional interpretation takes precedence. Since only orientation can be understood as a genuine abstract interpretation of the arrow, while proximity is a ‘natural’ feature of the graphic element, the transition between proximity and orientation gives us a way to check at what age children’s ability to apply abstract meanings to graphic elements truly begins.
+
+To address this, the three studies presented below smoothly trace the development of graphical deixis across the preschool years employing novel stimulus configurations. *Study 1* tests spontaneous arrow comprehension free of spatial proximity or perceptual-weight confounds, while contrasting performance directly with graphic markers. *Study 2* disentangles the competing roles of spatial proximity and vector direction in children's interpretation of arrows by presenting ambiguous displays, and *Study 3* pioneers a set of novel vector symbols to demonstrate when preschoolers productively generalize the vector principle to unfamiliar instances. The object-choice paradigm employed in all three studies goes beyond attentional cueing and requires children to actively interpret and respond to these cues under conditions of minimal instruction and without feedback.
+
+# Study 1 - Markers and Arrows
+To trace the onset of children's comprehension of arrows and markers, *Study 1* tested children between 2 and 5 years of age using a picture-book-style object-choice task in which a cartoon agent was providing a marker or simplified arrow to guide children's choices. Based on the literature [@tomasello1997comprehension; @zlatev2013semioticvehicles; @leekam2010adults], we derived the hypotheses that children would succeed earlier in the *Marker* condition than in the *Arrow* condition (*H1*), but would perform above chance in both conditions by age four (*H2*). The preregistration is accessible online [study1](https://osf.io/2yudb): <https://osf.io/2yudb>, as are the materials, stimuli, data and analyses required for replication or reproducing all results in the studies presented here [LINK MASKED FOR REVIEW].
+
+## Participants
+To achieve dense, continuous sampling we tested two children per month of age between the second and fifth birthday. The final sample comprised `r age.report.data["study1", "N"]` children ($M$ = `r age.report.data["study1", "Mean"]` months, $SD$ = `r age.report.data["study1", "SD"]` months, range `r age.report.data["study1", "Min"]` - `r age.report.data["study1", "Max"]` months; `r age.report.data["study1", "female"]` female). All participants came from a predominantly white population of middle to high income families and were recruited in [MASKED FOR REVIEW], a major European city. Parents were invited via a database of participants for child development studies for which they had signed up. Children were tested in day- and after school-care for the most part, and occasionally in the lab or at home. In addition, `r sum(drop.report.data.S1$N)` children were tested but not submitted to the final sample for not fulfilling the preregistered criteria of succeeding during familiarization ($N$ = `r drop.report.data.S1["fail_in_fam", "N"]`, see below), or because they did not finish a minimum of 8 test trials ($N$ = `r drop.report.data.S1["quit_early", "N"]`). Furthermore, `r drop.report.data.S1["fussy_child", "N"]` children were excluded due to being fussy during testing. Data collection took place between July 2021 and April 2022 and was approved by the ethics committee at [MASKED FOR REVIEW] under the application [MASKED FOR REVIEW].
+
+## Stimuli and Procedure
+Tasks were presented on a screen in the style of an interactive picture-book (cf. Figure \@ref(fig:plot-figure-setupS1) A). To introduce the game, the experimenter (E) presented a cartoon monkey (Coco) who placed a banana under one of two cups in plain sight. Children were asked, "Where is the banana?" and indicated their choice by pointing. E provided immediate feedback ("Well done!" or "Hmm, let's try again!") while revealing the banana in 4 to 8 total familiarization trials depending on whether the children chose correctly or needed more training. After familiarization, E announced that the monkey wanted to play a new game where they could not know the banana's location. An occluder covered the lower half of the screen, obscuring the hiding process. E narrated, "Coco is going to help you find the banana,". As soon as the monkey placed a marker or arrow to guide children's choice, they were prompted "Where is the banana?". E provided no feedback during test trials and merely acknowledged responses with a neutral "Thank you!". Children were neither instructed to follow cues nor did E describe the cues as markers or arrows. Trial presentations lasted 20–30 seconds. Children completed up to 16 test trials - 8 per condition - adding up to a 5-10 minute session per participant. The order of conditions was blocked and counterbalanced across participants as was the side of the target. To be included in the analysis, children were required to succeed in at least 66% of familiarization trials, and to complete a minimum of eight valid test trials.
+
+In the *Marker* Condition, the monkey placed a circle directly on either hiding place, akin to a sticker covering the target partially (see Figure \@ref(fig:plot-figure-setupS1) B). In the *Arrow* Condition, the monkey placed an equilateral triangle in the bottom center of the screen, with one vertex directed at either the left or right target (Figure \@ref(fig:plot-figure-setupS1) C). Crucially, this cue was lacking an arrow shaft reducing its visual weight and the potential for exogenous cueing. Furthermore, the triangle was placed on a mid-line such that the bulk of its mass and, hence, greater visual weight was leaning towards the distractor. Finally, the triangle as such was ambiguous as each of the vertices may be seen as pointing out (Figure \@ref(fig:plot-figure-setupS1) D). Hence, children were required to appreciate the cue information provided by a helpful interlocutor, view and organize the entire display, and extrapolate a vector from one of the triangle's vertices to either referent.
+
+```{r plot-figure-setupS1, fig.cap = "*Setup and Stimuli in Study 1.* Panel A shows the setup during testing. The experimenter was sitting behind the children in order to not distract them while supervising data collection. Panels B and C show a test trial for the Marker and Arrow condition. Panel D illustrates the balancing of the composition. Panel E shows all four stimuli used in Study 1.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations_raw/Setup_Study1.png"))
+
+```
+
+## Coding and Analyses
+All familiarization and test trials ($N$ = `r count.sampletrials["study1", "n"]`) were coded for being valid (0/1). A total of `r excludedtrials["study1", "n"]` trials (`r perc.excludedtrials["study1", "n"]` %) were excluded due to children quitting early, not responding, for responses being unclear, or due to experimenter error. For all valid trials, children's choices were coded as correct or incorrect (1/0). A third of test and familiarization trials were judged by a second coder. Coder agreement on trial validity ($\kappa$ = `r kappa.valid.S1`, $p$ \< .000) and performance ($\kappa$ = `r kappa.correct.S1`, $p$ \< .000) was unanimous. A final sample of `r count.testtrials["study1", "n"]` valid test trials from `r age.report.data["study1", "N"]` participants was submitted to analyses. 
+
+Using Bayesian logistic generalized linear mixed models (GLMMs; Bernoulli family with a logit link), we modeled participants binary choices ($0 = incorrect$, $1 = correct$) as a function of condition (*Marker*/*Arrow*) and age to estimate the probability of children interpreting cues correctly. Our Model ($correct \sim condition * c.age + c.trial + sex + (c.trial \mid subid)$) contained fixed effects for condition and mean-centered age as well as their interaction while controlling for mean-centered trial number (c.trial) and sex. The *Marker* Condition was set as reference level. To account for individual variability, we included random intercepts by participant (subid) as well as random slopes for trial number. To evaluate our model formula, we compared the preregistered model with a reduced model containing the same predictors but lacking the interaction of condition and age via Widely Applicable Information Criterion (WAIC) scores and weights [@mcelreath2018statistical] as well as the difference in Expected Log Predictive Density (ELPD) via the function *loo_compare*. All models used default priors and were run in Stan [@RStan] via the function *brm* of the package *brms* [@burkner2017brms]. Diagnostics and model comparisons are reported in the Supplementary Materials for brevity. 
+
+In order to define when children as a group perform above chance in the two conditions, we plotted model estimates as smoothed curves surrounded by their Credibility Intervals (CrI) [@house2017diverse; @kachel2026spontaneous]. Drawing values from the posterior predicted distribution via the function *fitted*, we created smooth developmental trajectories with 95% CrIs for children's performance. The criterion for settling when children performed above chance was essentially graphical: we approximated the point at which the lower 95% CrI for a each condition did no longer overlap with a mid-line demarcating the 50% chance level. All analyses were preregistered prior to data collection. We deviate from the preregistration when comparing models via ELPD differences [@sivula2020uncertainty]. While our primary conclusions draw on Bayesian inference, supplementary materials also provide conventional analyses binning participants according to their age in years (cf. Supplementary Table 1) to facilitate comparisons with prior literature. Above-chance performance was tested via two-tailed one-sample t-tests with a chance level set to .5 and presented along with Cohen's *d*. 
+
+## Results
+Both full and null models demonstrated convergence, strong predictive fit, and reliable posterior estimates. As both models yielded comparable WAIC and ELPD metrics, we present the full model below as specified in our preregistration. Generally, participants’ performance improved with age in both conditions ($\beta$ = `r S1.full.coef["c.age", "mean"]`, 95% CrI [`r S1.full.coef["c.age", "q2.5"]`, `r S1.full.coef["c.age", "q97.5"]`]). In contrast, there was no effect for the control variables *sex* ($\beta$ = `r S1.full.coef["sex1", "mean"]`, 95% CrI [`r S1.full.coef["sex1", "q2.5"]`, `r S1.full.coef["sex1", "q97.5"]`]) and *trial number* ($\beta$ = `r S1.full.coef["c.trial", "mean"]`, 95% CrI [`r S1.full.coef["c.trial", "q2.5"]`, `r S1.full.coef["c.trial", "q97.5"]`]). With the *Marker* condition serving as reference, there was no meaningful difference in performance between the experimental conditions ($\beta$ = `r S1.full.coef["arrow", "mean"]`, 95% CrI [`r S1.full.coef["arrow", "q2.5"]`, `r S1.full.coef["arrow", "q97.5"]`]). The interaction between condition and age was also not relevant ($\beta$ = `r S1.full.coef["arrow:c.age", "mean"]`, 95% CrI [`r S1.full.coef["arrow:c.age", "q2.5"]`,`r S1.full.coef["arrow:c.age", "q97.5"]`). While performance increases substantially over time, the developmental trajectories are almost identical, and we find no support for the hypothesized precedence of marker as opposed to arrow cues. Rather, children succeed in both conditions at about 35 months of age (*H1*, cf. Figure \@ref(fig:plot-study1)). For an overview of correct choices aggregated across twelve-months-intervals, please see Supplementary Table 1.  
+
+```{r plot-study1, fig.cap = "*Developmental Trajectories for Study 1.* Colored lines indicate smoothed mean performance by age with shaded CrIs. The dashed line demarcates chance level. Semi-transparent dots indicate individual participant means. Solid colored dots and vertical annotations mark the estimated age thresholds where performance exceeds chance level.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations/S1_plot.png"))
+
+```
+
+# Study 2 - Distance and Direction
+Previous work did not disentangle the role of pointing direction and spatial proximity in the comprehension of arrows. In study 2, we tested children between 2 and 6 years of age in the same object-choice task but placed the arrows either closer to the target they are pointing at (*Congruent*), or closer to one target while pointing to the other (*Incongruent*, cf. Figure \@ref(fig:plot-figure-setupS2) A). Based on the literature on pointing [@omadagain2019origin] and arrows [@jakobsen2013lookhere], we hypothesized that children would succeed earlier in the *Congruent* than in the *Incongruent* condition (*H1*) and that in the *Incongruent* condition, younger children would prefer the target closest to the cue, whereas older children would prefer the target cued by pointing direction (*H2*). For the preregistration, please see [Study 2](https://osf.io/a2nuh): <https://osf.io/a2nuh>. 
+
+## Participants
+The final sample comprises `r age.report.data["study2", "N"]` children ($M$ = `r age.report.data["study2", "Mean"]` months, $SD$ = `r age.report.data["study2", "SD"]` months, range `r age.report.data["study2", "Min"]` - `r age.report.data["study2", "Max"]` months; `r age.report.data["study2", "female"]` female). In addition, `r sum(drop.report.data.S2$N)` children were excluded for not succeeding in at least 66% of familiarization trials ($N$ = `r drop.report.data.S2["fail_in_fam", "N"]`), or because they did not finish a minimum of 8 test trials ($N$ = `r drop.report.data.S2["quit_early", "N"]`). Data collection took place from July 2021 to June 2022.
+
+## Stimuli and Procedure
+Except for the position and orientation of the arrow cue, the procedure was identical to *Study 1*. While the arrow was previously placed in central position, the space left and right of the center was now divided evenly to create four positions (left, mid-left, mid-right, right) to place the cue pointing either left or right. The *Congruent* condition was over-determined with proximity and direction aligning to cue the same target (cf. Figure \@ref(fig:plot-figure-setupS2) B). For the *Incongruent* condition, these dimensions competed with the cue being close to one target but pointing to the other (cf. Figure \@ref(fig:plot-figure-setupS2) C). Crucially, children received no feedback on performance in order to not resolve the ambiguity. Full counterbalancing of proximity and direction comprised eight trials, which served as the minimum for inclusion in analysis. Position was never repeated on consecutive trials, condition was repeated no more than twice, and the target location was not repeated for more than three consecutive trials. Task order was counterbalanced across participants, with half of participants starting with a congruent trial.
+
+```{r plot-figure-setupS2, fig.cap = "*Setup and Stimuli in Study 2.* Panel A shows a test trial for the Incongruent condition. Panel B has all four cue configurations for the Congruent condition and Panel C for the Incongruent condition.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations_raw/Setup_Study2.png"))
+
+```
+
+## Coding and Analysis 
+Data collection yielded a sample of `r count.sampletrials["study2", "n"]` familiarization and test trials. A total of `r excludedtrials["study2", "n"]` trials (`r perc.excludedtrials["study2", "n"]` %) were excluded due to children quitting early, not responding, or due to responses being unclear. Coder agreement on trial validity ($\kappa$ = `r kappa.valid.S2`, p \< .000) and performance ($\kappa$ = `r kappa.correct.S2`, p \< .000) was unanimous. A final sample of `r count.testtrials["study2", "n"]` valid test trials from `r age.report.data["study2", "N"]` participants was submitted to analyses. Model formulation ($correct \sim condition * c.age + c.trial + sex + (c.trial \mid subid)$) and analyses were identical to *Study 1*.
+
+## Results
+Model diagnostics for both full and null models demonstrated convergence, strong predictive fit, and reliable posterior estimates. WAIC and ELPD metrics favor the full model as specified in our preregistration. With the *Congruent* condition serving as reference, analysis reveals a strong and credible main affect of condition. Children performed less accurate in the *Incongruent* condition ($\beta$ = `r S2.full.coef["incongruent", "mean"]`, 95% CrI [`r S2.full.coef["incongruent", "q2.5"]`, `r S2.full.coef["incongruent", "q97.5"]`]). While participants’ performance generally improved with age ($\beta$ = `r S2.full.coef["c.age", "mean"]`, 95% CrI [`r S2.full.coef["c.age", "q2.5"]`, `r S2.full.coef["c.age", "q97.5"]`]), the interaction of condition and age ($\beta$ = `r S2.full.coef["incongruent:c.age", "mean"]`, 95% CrI [`r S2.full.coef["incongruent:c.age", "q2.5"]`,`r S2.full.coef["incongruent:c.age", "q97.5"]`) highlighted that the effect of age on accuracy was significantly delayed in the *Incongruent* condition. There appears no effect of fatigue or learning across trials ($\beta$ = `r S2.full.coef["c.trial", "mean"]`, 95% CrI [`r S2.full.coef["c.trial", "q2.5"]`, `r S2.full.coef["c.trial", "q97.5"]`]), but a credible effect of sex with male participants performing more accurately than females ($\beta$ = `r S2.full.coef["sex1", "mean"]`, 95% CrI [`r S2.full.coef["sex1", "q2.5"]`, `r S2.full.coef["sex1", "q97.5"]`]). 
+
+Inspecting the graphical representation of model estimates indicates that children succeed earlier in the *Congruent* condition (*H1*) with group-level success at about 36 months of age. Analysis yields a steeper developmental trajectory with almost unanimous responses from four years onward and generally surpassing performance in either *Marker* or *Arrow* condition of *Study 1*. Hence when congruent, distance and direction appear to have an additive effect. As predicted, younger children preferred the target closest to the arrow in the *Incongruent* condition, whereas older children reliably chose the target that the cue was pointing to (*H2*). Crucially, whereas up to 40 months of age children perform below chance, this pattern is reversed with above-chance-performance from about 59 months onward. In addition, children overall are less successful in the *Incongruent* condition than in the *Arrow* condition of Study 1 suggesting a subtractive effect of distance and direction when in conflict (cf. Figure \@ref(fig:plot-study2)). 
+
+These results are confirmed by the additional conventional analyses presented in Supplement Table 1. Whereas all age-groups in the *Congruent* condition perform above chance, two-year-olds in the *Incongruent* condition did not merely exhibit chance-level guessing. Instead, their performance was significantly below chance ($M = 33.9\%, SD = 25.0\%, t(23) = -3.15, p = .004, d = 0.64$). Testing participants individually against chance via binomial tests, shows that in the *Incongruent* Condition, 25% of 2-year-olds chose the target closer to the arrow symbol at rates significantly lower than expected by chance, whereas none showed a systematic preference for the target indicated by the arrow. In five-years-olds, this pattern is reversed with 73% of participants performing above chance on an individual level.
+
+```{r plot-study2, fig.cap = "*Developmental Trajectories for Study 2.* Colored lines indicate smoothed mean performance by age with shaded CrIs. The dashed line demarcates chance level. Semi-transparent dots indicate individual participant means. Solid colored dots and vertical annotations mark the estimated age thresholds where performance exceeds chance level.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations/S2_plot.png"))
+
+```
+
+# Study 3 - Unconventional Vector Symbols
+Study 1 and 2 established the conditions under which children understand arrows. However, as the triangle cues employed were similar to conventional weighted arrows, it is difficult to determine how much children’s knowledge of this specific conventional symbol influences their performance as opposed to an abstract principle. A crucial test for children's knowledge is their ability to generalize to novel instances. We designed a novel set of unfamiliar vector symbols and tested children between 3 and 5 years of age with the same procedure as in the studies above. Based on findings regarding endogenous cueing via arrow cues [@jakobsen2013lookhere], we hypothesized that children’s performance would surpass chance level at least by 48 months of age. The pregistration of the methods, analyses and stimuli is accessible at [Study3](https://osf.io/q825d): <https://osf.io/q825d>.
+
+## Participants
+For *Study 3*, the sample comprised `r age.report.data["study3", "N"]` children ($M$ = `r age.report.data["study3", "Mean"]` months, $SD$ = `r age.report.data["study3", "SD"]` months, range `r age.report.data["study3", "Min"]` - `r age.report.data["study3", "Max"]` months; `r age.report.data["study3", "female"]` female). In addition, `r sum(drop.report.data.S3$N)` children were excluded for not succeeding in at least 75% of familiarization trials (N = `r drop.report.data.S3["fail_in_fam", "N"]`), or because they did not finish a minimum of 8 test trials (N = `r drop.report.data.S3["quit_early", "N"]`). Data collection took place from November 2021 to May 2022.
+
+## Stimuli and Procedure
+In the context of graphic communication, any asymmetric display even as abstract as a texture gradient [@brignani2009endogenous] may become a vector symbol when produced with such intent. Such cues should be able to guide recipients' behavior so long as they are motivated and able to make the necessary pragmatic inference [@tomasello1997comprehension] and extrapolate a vector. To test this, a novel set of deictic symbols (cf. Figure \@ref(fig:plot-figure-setupS3), A-F) was created by adding a hole (B), indentation (C), bump (D) or overlay (E & F) to one side of an otherwise symmetric figure (square, circle, vertical line), resulting in symbols that have the potential to convey a sense of direction (cf. Figure \@ref(fig:plot-figure-setupS3)). Each of the five cue types (A-F) were used four times for a total of 20 test trials. Children had to complete at least ten trials to be included in the analysis. The direction of the cues was counterbalanced and the same cue type was never used in consecutive trials. The procedure was identical to *Studies 1 and 2*, with the exceptions that the monkey was presenting the cue as a drawing on a piece of paper.
+
+```{r plot-figure-setupS3, fig.cap = "*Setup and Stimuli in Study 3.* Panel A shows a test trial with a novel vector symbol. Panels B to F show all symbols used in Study 3.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations_raw/Setup_Study3.png"))
+
+```
+
+## Coding and Analysis
+Data collection for study 3 yielded a sample of `r count.sampletrials["study3", "n"]` familiarization and test trials. A total of `r excludedtrials["study3", "n"]` trials (`r perc.excludedtrials["study3", "n"]` %) were excluded due to children quitting early, not responding, or due to responses being unclear. Coder agreement on 33% of trials was perfect for performance ($\kappa$ = `r kappa.correct.S3`, p \< .000). Agreement on validity was 100% (Cohen’s $\kappa$ could not be computed due to constant ratings across raters). A final sample of `r count.testtrials["study3", "n"]` valid test trials from `r age.report.data["study3", "N"]` participants was submitted to analyses. In line with our preregistration, the different types of cues where not intended as experimental manipulations. Our main analytic goal was to determine at what age children are generally use the various novel cues as vector symbols. Model formulation ($correct \sim c.age + c.trial + sex + (c.age \mid cuetype) + (c.trial \mid subid)$) was analog to studies 1 and 2 but lacking a fixed effect for condition, while adding a random slope of age within cue type. This model was compared to a reduced model ($correct \sim c.age + c.trial + sex + (c.trial \mid subid)$) lacking this random slope. For the convenience of the reader, an additional exploratory model $correct \sim cuetype*c.age+c.trial+sex+(c.trial \mid subid$) containing cue types as fixed effect was run to allow plotting their trajectories along with the results of the reduced model. Please see Supplementary Materials for further information on model comparison and coefficients.
+
+## Results
+Model diagnostics confirmed convergence, excellent fit, and stable posterior estimates across both full and reduced model. Adding a a random slope of age within task did not improve predictive accuracy. As WAIC and ELPD values favored the reduced model, we report its results below. While there was no credible effect of sex ($\beta$ = `r S3.null.coef["sex1", "mean"]`, 95% CrI [`r S3.null.coef["sex1", "q2.5"]`, `r S3.null.coef["sex1", "q97.5"]`]) and trial number ($\beta$ = `r S3.null.coef["c.trial", "mean"]`, 95% CrI [`r S3.null.coef["c.trial", "q2.5"]`, `r S3.null.coef["c.trial", "q97.5"]`]), age emerged as a strong predictor of children's performance ($\beta$ = `r S3.null.coef["c.age", "mean"]`, 95% CrI [`r S3.null.coef["c.age", "q2.5"]`, `r S3.null.coef["c.age", "q97.5"]`]) with older children performing more accurate. For convenience, Figure \@ref(fig:plot-study3) features smoothed means and shaded CrIs from the reduced model along with the smoothed means for cue types from the exploratory model outlined above. Developmental trajectories appear virtually identical across the various types of unconventional arrow cues and overall reliable above-chance group-level-performance occurs at about 41 months of age, that is about half a year earlier than predicted (*H1*). Supplementary Table 1 provides the percentages of correct choices aggregated across twelve-months-intervals.
+
+```{r plot-study3, fig.cap = "*Developmental Trajectories for Study 3.* The bold colored line indicates smoothed mean performance by age with a shaded CrI. In addition, the faint colored lines illustrate smoothed mean performance for the different cue types. The dashed line demarcates chance level. Semi-transparent dots indicate individual participant means aggregated across cue types. Solid colored dots and vertical annotations mark the estimated age thresholds where performance exceeds chance level with the larger dot highlighting overall performance.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations/S3_Cue_plot.png"))
+
+```
+
+# Discussion
+In three complementary studies we tested young children in picture-book-style symbolic object-choice-tasks to investigate their comprehension of markers, arrows and novel vector symbols. *Study 1* established that children are capable of reading markers and arrows in the context of graphic displays at about 35 months of age. These findings contradict the presumption that only five-year-olds begin to grasp the conceptual meaning of arrows [@jakobsen2013lookhere]. As the study employed a reduced arrow cue lacking visual weight, results cannot be explained by exogenous cueing and low-level visual features. Rather, we find children to be able to follow directional cues in the absence of visual weight and proximity confounds just before their third birthday.
+
+In *Study 2*, children completed tasks with either redundant or competing displays of arrow cues, where spatial proximity and vector direction aligned or conflicted. Here our goal was to understand at what age children prioritize the orientation of the symbol – the abstract content, that is – when proximity would predict a different target. In congruent cases, effects of proximity and direction generally added up, but children succeeded basically at the same ages in the *Congruent* condition as in the *Marker* and *Arrow* conditions of *Study 1*, which may be indicative of a developmental threshold: children just master dual representation at the end of the third year [@deloache2011early] and may not be able to succeed earlier when tested with deictic symbols in the graphic domain. The *Incongruent* condition yielded a remarkable developmental pattern: up to three and a half years children favored a proximity-based interpretation of the stimulus and systematically ignored pointing direction. Performance improved strongly between the fourth and fifth birthday and - by five years of age - extrapolating a vector from an arrow appears to be so internalized and habitual that children systematically ignored conflicting proximity cues leading to stable above-chance performance from 59 months onward. These results are in line with analogical results in the comprehension of the pointing gesture: children were found to overcome a proximity bias, and interpret pointing gestures purely in terms of their orientation, only after six years of age [@omadagain2019origin]. The results from the *Incongruent* condition indicate a strong change in the way young children spontaneously structure an ambiguous graphic array, switching from favoring a proximity-based interpretation driven by salience and perceptual grouping to a vector-based interpretation resting on an abstract cultural norm. Accordingly, we interpret these results to document the emergence of a specific form of visual expertise in the graphic domain that mirrors effects of literacy acquisition [@dehaene2010visionlanguage; @dehaene2009reading], but emerges significantly earlier. Results are also in line with documented shifts from exogenous to endogenous primacy in attentional cueing [@colombo2001development; @jakobsen2013lookhere; @hommel2001symboliccontrol; @wainwright2005devofendogenous] as well as with the finding that arrow comprehension appears mature by six years of age [@landry2019developmentendogenous]. 
+
+In *Study 3*, targets were cued with various novel and unfamiliar vector symbols. Children decoded these novel cues spontaneously by about 41 months of age, and just at the onset of the interpretational shift documented in *Study 2*. To the extent that the cues had little (cf. Figure \@ref(fig:plot-figure-setupS3) D & E) to no visual weight (Figure \@ref(fig:plot-figure-setupS3) B, C, F) towards their pointing direction and appeared to be functionally equivalent, the results cannot be explained by exogenous cueing or low-level salience. Our preferred interpretation is that children around three and a half years of age have sufficiently internalized the principle of vector symbols that they systematically *read* such novel displays as arrows. With the exception of the use of a texture gradient in an attentional cueing paradigm [@brignani2009endogenous], this is the first time an experimental manipulation investigated children's proficiency with deictic symbols on cues that are not resembling conventional arrows, pointing gestures or gaze. *Study 3* may thus provide a compelling demonstration of symbolic sensitivity [@deloache2011early], showing that growing familiarity with graphic conventions enhances children's ability to navigate novel symbolic forms. Finally, testing diverse types of unconventional vector symbols may offer fresh perspectives on the development of endogenous cueing, answering to a call for research that illustrates how attentional control is shaped by behavioral relevance in practical contexts [@ristic2012autosymbolorienting].
+
+Together, our findings show a clear developmental trajectory in the interpretation of graphic deixis. Children read both arrows and markers by the end of their third year — coinciding with the onset of representational insight  [@deloache2011early]. However, both proximity and orientation can play a role in fixing the reference of these symbols. When these two referential principles conflict, children favor marker-based proximity up to 3.5 years; however, throughout the fourth year, this preference shifts toward directionality. Already at this stage, vector-projection is not restricted to conventional arrows, but serves as a productive semiotic principle that children spontaneously apply to novel symbols in relevant contexts. By the fifth year, the vector-based interpretation of directional cues becomes so deeply ingrained that it dominates even against competing spatial evidence. We propose that growing up immersed in graphic environments fosters perceptual habits and symbolic expertise that lead children to treat specific graphic cues as inherently directional. Future research should directly track individual exposure to graphic symbols and provide cross-cultural comparisons in less graphically saturated contexts. Methodologically, key next steps include testing whether these proximity–vector trade-offs extend to 3D physical spaces [@omadagain2019origin] and using eye-tracking to capture real-time attentional allocation under cue conflict. Ultimately, the three studies presented here establish a clear empirical foundation for tracking graphic deixis across early childhood. They provide key examples for how enculturation and exposure to graphic conventions continuously shape young children’s visual expertise and behavior from the dawn of symbolic competence to school entry.
+
+\newpage
+
+# References
+
+::: {#refs custom-style="Bibliography"}
+:::

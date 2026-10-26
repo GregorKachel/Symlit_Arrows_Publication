@@ -1,0 +1,263 @@
+---
+title             : "SUPPLEMENTARY MATERIAL for Deixis in the Graphic Domain - Young Children's Comprehension of Arrows and Markers"
+shorttitle        : "Young Children’s Comprehension of Deixis in the Graphic Domain"
+author: 
+  - name          : "Gregor Kachel"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Universitätsallee 1, C1.008a, 21335 Lüneburg"
+    email         : "gregor.kachel&#64;leuphana.de"
+    role: # Contributorship roles (e.g., CRediT, https://credit.niso.org/)
+      - "Conceptualization"
+      - "Funding Acquisition"
+      - "Project Administration"
+      - "Investigation"
+      - "Methodology"
+      - "Data Curation"
+      - "Formal Analysis"
+      - "Visualization"
+      - "Writing - Original Draft Preparation"
+      - "Writing - Review & Editing"
+  - name          : "Cathal O'Madagain"
+    affiliation   : "2"
+    role:
+      - "Conceptualization"
+      - "Methodology"
+      - "Writing - Review & Editing"
+  - name          : "Daniel Haun"
+    affiliation   : "3"
+    role:
+      - "Resources"
+      - "Writing - Review & Editing"
+  - name          : "Manuel Bohn"
+    affiliation   : "1,3"
+    role:
+      - "Methodology"
+      - "Formal Analysis"
+      - "Validation"
+      - "Writing - Review & Editing"
+      - "Supervision"
+affiliation:
+  - id            : "1"
+    institution   : "Leuphana University"
+  - id            : "2"
+    institution   : "School of Collective Intelligence; Université Mohammed VI Polytechnique: Ben Guerir"
+  - id            : "3"
+    institution   : "Max-Planck-Institute for Evolutionary Anthropology"
+    
+wordcount         : "1997 words (Intro=1037 and Discussion=960) 40 references"
+bibliography      : ["library.bib"]
+floatsintext      : no
+linenumbers       : yes
+draft             : no
+mask              : no
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+csl: apa7.csl
+output: papaja::apa6_docx
+    
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, scourcing_script, eval=T, warning=F, include=F, echo=F}
+
+# Data Wrangling
+if (!require(tidyverse)) install.packages('tidyverse'); library(tidyverse)
+# Conventional Analyses
+if (!require(lsr)) install.packages('lsr'); library(lsr) # Analysis, Cohen's D
+if (!require(scales)) install.packages('scales'); library(scales) # 
+# bayes
+if (!require(brms)) install.packages('brms'); library(brms) # 
+if (!require(tidybayes)) install.packages('tidybayes'); library(tidybayes) # 
+if (!require(HDInterval)) install.packages('HDInterval'); library(HDInterval) # 
+if (!require(posterior)) install.packages('posterior'); library(posterior) # 
+# reliability
+if (!require(irr)) install.packages('irr'); library(irr) # 
+# plotting and illustrations
+if (!require(patchwork)) install.packages('patchwork'); library(patchwork) # 
+if (!require(magick)) install.packages('magick'); library(magick) # 
+if (!require(cowplot)) install.packages('cowplot'); library(cowplot) # 
+if (!require(png)) install.packages('png'); library(png) # 
+if (!require(grid)) install.packages('grid'); library(grid) # 
+if (!require(ggthemes)) install.packages('ggthemes'); library(ggthemes) 
+if (!require(ggview)) install.packages('ggview'); library(ggview) # previewing
+if (!require(ggtext)) install.packages('ggtext'); library(ggtext) # previewing
+# Tables
+if (!require(flextable)) install.packages('flextable'); library(flextable) 
+if (!require(knitr)) install.packages('knitr'); library(knitr) # 
+if (!require(kableExtra)) install.packages('kableExtra'); library(kableExtra) # 
+
+# NOTE; how to push title, authornotes and abstract 
+# note: "\\clearpage"
+knitr::opts_chunk$set(echo = TRUE)
+library("papaja")
+r_refs("library.bib")
+# Seed for random number generation
+set.seed(42)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+
+```
+
+```{r, load_results, eval=T, warning=F, include=F, echo=F}
+
+# Get all .rds files, read them, and unpack into separate global objects
+list.files("../results", pattern = "\\.rds$", full.names = TRUE) %>% 
+  set_names(~ tools::file_path_sans_ext(basename(.x))) %>% 
+  map(read_rds) %>% 
+  list2env(envir = .GlobalEnv)
+
+```
+
+<!-- Begin of the document -->
+
+# Literature Review
+```{r plot-review, fig.cap = "*Overview of Task Paradigms and Cue Designs in Prior Literature.* \\small Note. Panel A illustrates a playing card as used by Lee et al. (1998), in which an agent in the center points an arrow toward one of four corner targets to indicate a preference. Panel B illustrates the object-choice task from Leekam et al. (2010), in which an experimenter holds a cut-out arrow above one of three hiding places. Panel C illustrates Study 1 from Jakobsen et al. (2013), where a printed arrow is placed between two hiding places, filling the intervening space. Panel D illustrates the screen-based attentional cueing task from Jakobsen et al. (2013, Study 2), showing the central attention-getter, the central arrow cue in middle of three target squares, and the target stimulus appearing in the cued square. Panel E depicts the stimulus variations from Jakobsen et al. (2013, Study 2): (1) weight-congruent, direction-congruent arrow; (2) weight-congruent square; (3) weight-congruent, direction-incongruent arrow; (4) balanced direction-congruent arrow; (5) balanced square; (6) balanced direction-incongruent arrow; (7) weight-incongruent, direction-congruent arrow; (8) weight-incongruent square; and (9) weight-incongruent, direction-incongruent arrow. All setups featuring a communicative agent (Panels A–C) confound arrow direction with spatial proximity. Jakobsen et al. (2013, Study 2; Panel D) found no directional effect on attentional cueing prior to age 5, suggesting that younger children's attention is driven by perceptual features rather than symbolic meaning.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations_raw/literature_review.png"))
+
+```
+
+\newpage
+# Demographics 
+```{r suppl-participants-plot, fig.cap = "Distribution of Participants across the age-range in all three studies. Dots represent individuals. Colors indicate their respective sex.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations/plot_participants.png"))
+
+```
+
+```{r suppl-drop-plot, fig.cap = "Distribution of Exclusions across the age-range in all three studies. Dots represent individuals. Colors indicate why children where not submitted to analyses.", echo = FALSE, out.width = "95%"}
+
+knitr::include_graphics(knitr::plot_crop("../illustrations/plot_drops.png"))
+
+```
+
+```{r suppl-agetable, tab.cap = "Demographic Information by Years of Age.", eval = F, echo=F, warnings = F}
+
+ft.age.table.data <- flextable(age.table.data) %>%
+  flextable::theme_apa() %>%
+  line_spacing(space = 1.0, part = "all") %>%
+  padding(padding.top = 2, padding.bottom = 2, part = "all") %>%
+  set_caption("suppl-agetable") %>%
+  fontsize(size = 9, part = "all") %>%
+  set_table_properties(layout = "autofit") %>%
+  add_footer_lines(values = "Note. Mean, Minimum and Maximum and SD report ages in months.") %>%
+  fontsize(part = "footer", size = 8) %>%  
+  autofit()
+
+ft.age.table.data
+
+```
+
+\newpage
+# Descriptives and Conventional Analyses
+
+```{r suppl-descrtable, tab.cap = "Descriptives and Conventional Analyses", eval = T, echo=F, warnings = F}
+
+ft.arrows.descr.data <- flextable(
+  arrows.descr.data %>% mutate(across(c(N, df, `N suc`), as.numeric))) %>%
+  flextable::theme_apa() %>%
+  set_caption("suppl-descrtable") %>%
+  line_spacing(space = 1.0, part = "all") %>%
+  padding(padding.top = 2, padding.bottom = 2, part = "all") %>%
+  # getting rid of digits
+  colformat_double(j = c("N", "df", "N suc"), digits = 0) %>%
+  fontsize(size = 9, part = "all") %>%
+  set_table_properties(layout = "autofit") %>%
+  add_footer_lines(values = "Note. *Trials* = total trials across participants; *Trials/N* = average per participant. Performance (*M*, *SD*) is percent of correct responses. *N suc* and *% suc* show number and percent of individuals above chance. *t*, *df*, *p* and *d* reflect one-sample t-tests against chance level (0.5).") %>%
+  fontsize(part = "footer", size = 8) %>%  
+  autofit()
+
+ft.arrows.descr.data
+```
+
+
+# Model Diagnostics and Comparisons
+
+## Study 1
+
+In Study 1, we compared the performance of a full model ($correct \sim condition * c.age + c.trial + sex + (c.trial \mid subid)$) with a reduced model lacking the interaction of condition and age ($correct \sim condition + c.age + c.trial + sex + (c.trial \mid subid)$). Effective sample sizes for all fixed effects in the full model (Bulk ESS, $M$ = `r round(mean(S1.full.coef$ess_bulk), 0)`, range `r round(min(S1.full.coef$ess_bulk), 0)` - `r round(max(S1.full.coef$ess_bulk), 0)`) and the reduced model (Bulk ESS, $M$ = `r round(mean(S1.null.coef$ess_bulk), 0)`, range `r round(min(S1.null.coef$ess_bulk), 0)`-`r round(max(S1.null.coef$ess_bulk), 0)`) were \>1000, indicating reliable posterior estimations. Posterior predictive checks (PPC) indicated excellent fit of the observed data, and Rhat values in both models were equal to one for both the full and reduced model. The Widely Applicable Information Criterion (WAIC) for the full (WAIC = `r round(S1.comp["S1.full.bm", "waic"],2)`) and the reduced model (WAIC = `r round(S1.comp["S1.null.bm", "waic"],2)`) are almost identical. Comparing weights based on the WAIC yielded `r round(S1.weights["S1.full.bm","value"]*100,2)`% of the model weight for the full model, and `r round(S1.weights["S1.null.bm","value"]*100,2)`% for the reduced model, strongly favoring the simpler model lacking the interaction of age and condition. At the same time, comparison of the models' WAIC using expected log predictive density (ELPD) shows that this difference is not statistically meaningful (ELPD WAIC; full model = `r round(S1.comp["S1.full.bm", "elpd_waic"],2)`; reduced model = `r round(S1.comp["S1.null.bm", "elpd_waic"],2)`). The standard error of the difference in predictive accuracy ($SE$ = `r round(S1.comp["S1.full.bm", "se_diff"],2)`) shows that the difference itself (ELPD diff = `r round(S1.comp["S1.full.bm", "elpd_diff"],2)`) is negligible. In the absence of conclusive evidence for either model, we report estimates from the full model in line with the preregistration.
+
+```{r suppl-S1-coef-table, tab.cap = "Study 1 - Posterior Estimates for the Full Model.", eval = T,  echo=F, warnings = F}
+
+ft <- flextable(S1.full.coef.table) %>%
+  flextable::theme_apa() %>%
+  set_caption("suppl-S1-coef-table") %>%
+  line_spacing(space = 1.0, part = "all") %>%
+  padding(padding.top = 2, padding.bottom = 2, part = "all") %>%
+  fontsize(size = 9, part = "all") %>%
+  set_table_properties(layout = "autofit") %>%
+  add_footer_lines(values = "Note. Estimates represent posterior means with 95% equal-tailed credible intervals (CrIs). MAD indicates Median Absolute Deviation. ESS refers to effective sample size. R̂ values omitted as they are all ~1 indicating convergence.  * = variables were standardized.") %>%
+  fontsize(part = "footer", size = 8) %>%  
+  autofit()
+ft
+
+```
+
+
+\newpage
+
+
+## Study 2
+Analyses in Study 2 followed the same rationale as in Study 1 and compared the performance of a full model ($correct \sim condition * c.age + c.trial + sex + (c.trial \mid subid)$) with a reduced model lacking the interaction of condition and age ($correct \sim condition + c.age + c.trial + sex + (c.trial \mid subid)$). Effective sample sizes for all fixed effects in the full model (Bulk ESS, $M$ = `r round(mean(S2.full.coef$ess_bulk), 0)`, range `r round(min(S2.full.coef$ess_bulk), 0)` - `r round(max(S2.full.coef$ess_bulk), 0)`) and the reduced model (Bulk ESS, $M$ =`r round(mean(S2.null.coef$ess_bulk), 0)`, range `r round(min(S2.null.coef$ess_bulk), 0)`-`r round(max(S2.null.coef$ess_bulk), 0)`) were \>1000, indicating reliable posterior estimations. For both models, PPCs indicated excellent fit, and Rhat values were equal to one. There full model's WAIC score is over 50 lower for the full model (WAIC = `r round(S2.comp["S2.full.bm", "elpd_waic"],2)`) as opposed to the reduced model (WAIC = `r round(S2.comp["S2.null.bm", "elpd_waic"],2)`), providing decisive evidence in favor of the full model. The gain in fit resulting from including an interaction of age and condition justifies the additional complexity. This is corroborated by comparing weights based on the WAIC: the full model gains `r round(S2.weights["S2.full.bm","value"]*100,2)`% of the model weight, whereas only `r round(S2.weights["S2.null.bm","value"]*100,2)`% of the weight is allocated to the reduced model. Finally, a comparison of the models' WAIC via ELPD shows that the difference (ELPD diff = `r round(S2.comp["S2.null.bm", "elpd_diff"],2)`) is much larger than its standard error ($SE$ = `r round(S2.comp["S2.null.bm", "se_diff"],2)`), showing that the full model would predict out of sample data much more accurately. In line with these results, we report estimates from the full model.
+
+```{r suppl-S2-coef-table, tab.cap = "Study 2 - Posterior Estimates for the Full Model.", eval = T,  echo=F, warnings = F}
+
+ft <- flextable(S2.full.coef.table) %>%
+  flextable::theme_apa() %>%
+  set_caption("suppl-S2-coef-table") %>%
+  fontsize(size = 9, part = "all") %>%
+  line_spacing(space = 1.0, part = "all") %>%
+  padding(padding.top = 2, padding.bottom = 2, part = "all") %>%
+  set_table_properties(layout = "autofit") %>%
+  add_footer_lines(values = "Note. Estimates represent posterior means with 95% equal-tailed credible intervals (CrIs). MAD indicates Median Absolute Deviation. ESS refers to effective sample size. R̂ values omitted as they are all ~1 indicating convergence.  * = variables were standardized.") %>%
+  fontsize(part = "footer", size = 8) %>%  
+  autofit()
+ft
+
+```
+
+\newpage
+
+## Study 3
+For Study 3, we compared an full model ($correct \sim c.age + c.trial + sex + (c.age \mid cuetype) + (c.trial \mid subid)$) with a random slope of age within cue type with a reduced model ($correct \sim c.age + c.trial + sex + (c.trial \mid subid)$) lacking this random slope. In Study 3, effective sample sizes for all fixed effects in the full model (Bulk ESS, $M$ = `r round(mean(S3.full.coef$ess_bulk), 0)`, range `r round(min(S3.full.coef$ess_bulk), 0)` - `r round(max(S3.full.coef$ess_bulk), 0)`) and the reduced model (Bulk ESS, $M$ =`r round(mean(S3.null.coef$ess_bulk), 0)`, range `r round(min(S3.null.coef$ess_bulk), 0)`-`r round(max(S3.null.coef$ess_bulk), 0)`) indicated reliable posterior estimations. For both models, posterior predictive checks (PPC) yielded excellent fit, and Rhat values were equal to one. The WAIC scores for the full model (ELPD WAIC = `r round(S3.comp["S3.full.bm", "elpd_waic"],2)`) and the reduced model (ELPD WAIC = `r round(S3.comp["S3.null.bm", "elpd_waic"],2)`) are almost identical. A comparison of the models' WAIC via ELPD shows that the difference (ELPD diff = `r round(S3.comp["S3.full.bm", "elpd_diff"],2)`) is not larger than its standard error ($SE$ = `r round(S3.comp["S3.full.bm", "se_diff"],2)`) and indicates that the reduced model has slightly better predictive performance. However, weights  strongly favor the reduced model by allocating `r round(S3.weights["S3.null.bm","value"]*100,2)`% of model weight to it as opposed to  `r round(S3.weights["S3.full.bm","value"]*100,2)`% to the full model. While being more complex, the full model provides no meaningful gain in predictive accuracy. Hence, we report estimates from the reduced model.
+
+```{r suppl-S3-coef-table, tab.cap = "Study 3 - Posterior Estimates for the Reduced Model.", eval = T,  echo=F, warnings = F}
+
+ft <- flextable(S3.null.coef.table) %>%
+  flextable::theme_apa() %>%
+  set_caption("suppl-S3-coef-table") %>%
+  line_spacing(space = 1.0, part = "all") %>%
+  padding(padding.top = 2, padding.bottom = 2, part = "all") %>%
+  fontsize(size = 9, part = "all") %>%
+  set_table_properties(layout = "autofit") %>%
+  add_footer_lines(values = "Note. Estimates represent posterior means with 95% equal-tailed credible intervals (CrIs). MAD indicates Median Absolute Deviation. ESS refers to effective sample size. R̂ values omitted as they are all ~1 indicating convergence.  * = variables were standardized.") %>%
+  fontsize(part = "footer", size = 8) %>%  
+  autofit()
+ft
+
+```
+
+\newpage
+
+## Study 3 - Exploratory Model
+Finally, we also ran an exploratory model ($correct \sim cuetype*c.age+c.trial+sex+(c.trial \mid subid$) in Study 3 that included a fixed effect for cue type. Regression coefficients revealed no credible differences across cue types, with all point estimates near zero, standard errors ($\approx 0.29$) exceeding effect sizes, and 95% CrIs spanning zero. Thus, children performed comparably across all five cue variations. In addition, the WAIC scores for the exploratory model (ELPD WAIC = `r round(S3task.comp.task.null["S3.null.bm", "elpd_waic"],2)`) and the reduced model (ELPD WAIC = `r round(S3task.comp.task.null["S3task.null.bm", "elpd_waic"],2)`) are almost identical. A comparison of the models' WAIC via ELPD shows that the difference (ELPD diff = `r round(S3task.comp.task.null["S3task.null.bm", "elpd_diff"],2)`) is slightly larger than its standard error ($SE$ = `r round(S3task.comp.task.null["S3task.null.bm", "se_diff"],2)`) and indicates that the reduced model has slightly better predictive performance. Finally, weights  strongly favor the reduced model by allocating `r round(S3task.weights.task.null["S3.null.bm","value"]*100,2)`% of model weight to it as opposed to `r round(S3task.weights.task.null["S3task.null.bm","value"]*100,2)`% to the exploratory model, which corroborates that the reduced model is the best choice for our primary analyses.
+
+```{r suppl-S3task-coef-table, tab.cap = "Study 3 - Posterior Estimates for the Exploratory Model.", eval = T,  echo=F, warnings = F}
+
+ft <- flextable(S3task.null.coef.table) %>%
+  flextable::theme_apa() %>%
+  set_caption("suppl-S3-coef-table") %>%
+  line_spacing(space = 1.0, part = "all") %>%
+  padding(padding.top = 2, padding.bottom = 2, part = "all") %>%
+  fontsize(size = 9, part = "all") %>%
+  set_table_properties(layout = "autofit") %>%
+  add_footer_lines(values = "Note. Estimates represent posterior means with 95% equal-tailed credible intervals (CrIs). MAD indicates Median Absolute Deviation. ESS refers to effective sample size. R̂ values omitted as they are all ~1 indicating convergence.  * = variables were standardized.") %>%
+  fontsize(part = "footer", size = 8) %>%  
+  autofit()
+ft
+
+```
+
